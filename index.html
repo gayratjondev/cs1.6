@@ -32,32 +32,46 @@
 
         h1 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: center;
+        }
+
+        .config-section {
+            margin-bottom: 25px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .config-section h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
         }
 
         .config-box {
             background: #f5f5f5;
             border: 2px solid #ddd;
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
+            font-size: 13px;
             word-wrap: break-word;
-            max-height: 300px;
+            max-height: 150px;
             overflow-y: auto;
             color: #333;
         }
 
         .copy-btn {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -79,12 +93,13 @@
 
         .status-message {
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
+            margin-top: 10px;
+            font-size: 13px;
             color: #11998e;
             font-weight: bold;
             opacity: 0;
             transition: opacity 0.3s ease;
+            min-height: 20px;
         }
 
         .status-message.show {
@@ -96,68 +111,96 @@
     <div class="container">
         <h1>🎮 SUPERB0Y Config</h1>
         
-        <div class="config-box" id="configText">
-name "SUPERB0Y";rate "25000";cl_cmdrate "101";cl_updaterate "101";ex_interp "0.01";cl_lw "1";cl_lc "1";cl_dynamiccrosshair "0";cl_crosshair_size "small";cl_crosshair_translucent "0";gl_spriteblend "0";fps_max "101";cl_weather "0";gamma "3";brightness "3";gl_overbright "1";cl_minmodels "1";cl_corpsestay "10";max_shells "0";hud_fastswitch "1";hud_centerid "1";m_filter "0";cl_righthand "1";net_graph "3";cl_bob "0";cl_bobcycle "0";cl_bobup "0";bind "mwheelup" "+jump";bind "mwheeldown" "+duck; wait; -duck";bind "space" "+jump";bind "ctrl" "+duck";bind "F1" "m4a1; ak47; primammo; vesthelm; vest; defuser";host_writeconfig;echo "SUPERB0Y Config Loaded Successfully"
+        <!-- Config 1: Basic Settings -->
+        <div class="config-section">
+            <h2>1️⃣ Basic Settings</h2>
+            <div class="config-box" id="configText1">name "SUPERB0Y"; rate "25000"; cl_cmdrate "101"; cl_updaterate "101"; ex_interp "0.01"; cl_lw "1"; cl_lc "1"; cl_dynamiccrosshair "0"; cl_crosshair_size "small"; cl_crosshair_translucent "0"; gl_spriteblend "0"; fps_max "101";</div>
+            <button class="copy-btn" data-config="1">
+                📋 Copy Basic Settings
+            </button>
+            <div class="status-message" id="statusMsg1"></div>
         </div>
 
-        <button class="copy-btn" id="copyBtn">
-            📋 Copy Config
-        </button>
+        <!-- Config 2: Display & HUD Settings -->
+        <div class="config-section">
+            <h2>2️⃣ Display & HUD Settings</h2>
+            <div class="config-box" id="configText2">cl_weather "0"; gamma "3"; brightness "3"; gl_overbright "1"; cl_minmodels "1"; cl_corpsestay "10"; max_shells "0"; hud_fastswitch "1"; hud_centerid "1"; m_filter "0"; cl_righthand "1"; net_graph "3"; cl_bob "0"; cl_bobcycle "0"; cl_bobup "0";</div>
+            <button class="copy-btn" data-config="2">
+                📋 Copy Display Settings
+            </button>
+            <div class="status-message" id="statusMsg2"></div>
+        </div>
 
-        <div class="status-message" id="statusMsg">
-            ✓ Config muvaffaqiyatli nusxalandi!
+        <!-- Config 3: Key Bindings -->
+        <div class="config-section">
+            <h2>3️⃣ Key Bindings</h2>
+            <div class="config-box" id="configText3">bind "mwheelup" "+jump"; bind "mwheeldown" "+duck; wait; -duck"; bind "space" "+jump"; bind "ctrl" "+duck"; bind "F1" "m4a1; ak47; primammo; vesthelm; vest; defuser"; host_writeconfig;</div>
+            <button class="copy-btn" data-config="3">
+                📋 Copy Key Bindings
+            </button>
+            <div class="status-message" id="statusMsg3"></div>
         </div>
     </div>
 
     <script>
-        const copyBtn = document.getElementById('copyBtn');
-        const statusMsg = document.getElementById('statusMsg');
-        const configText = document.getElementById('configText').textContent.trim();
-
-        copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(configText);
-                
-                // Button o'zgarishi
-                copyBtn.textContent = '✓ Nusxalandi!';
-                copyBtn.classList.add('copied');
-                
-                // Status message ko'rsatish
-                statusMsg.classList.add('show');
-                
-                // 2 soniyadan keyin asl holatga qaytarish
-                setTimeout(() => {
-                    copyBtn.textContent = '📋 Copy Config';
-                    copyBtn.classList.remove('copied');
-                    statusMsg.classList.remove('show');
-                }, 2000);
-                
-            } catch (err) {
-                // Eski browserlar uchun fallback
-                const textArea = document.createElement('textarea');
-                textArea.value = configText;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-999999px';
-                document.body.appendChild(textArea);
-                textArea.select();
+        // Barcha copy buttonlarni topish
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        
+        // Har bir button uchun event listener qo'shish
+        copyButtons.forEach(button => {
+            button.addEventListener('click', async function() {
+                const configNum = this.getAttribute('data-config');
+                const configText = document.getElementById(`configText${configNum}`).textContent.trim();
+                const statusMsg = document.getElementById(`statusMsg${configNum}`);
                 
                 try {
-                    document.execCommand('copy');
-                    copyBtn.textContent = '✓ Nusxalandi!';
-                    copyBtn.classList.add('copied');
+                    await navigator.clipboard.writeText(configText);
+                    
+                    // Button o'zgarishi
+                    const originalText = this.textContent;
+                    this.textContent = '✓ Nusxalandi!';
+                    this.classList.add('copied');
+                    
+                    // Status message ko'rsatish
+                    statusMsg.textContent = '✓ Muvaffaqiyatli nusxalandi!';
                     statusMsg.classList.add('show');
                     
+                    // 2 soniyadan keyin asl holatga qaytarish
                     setTimeout(() => {
-                        copyBtn.textContent = '📋 Copy Config';
-                        copyBtn.classList.remove('copied');
+                        this.textContent = originalText;
+                        this.classList.remove('copied');
                         statusMsg.classList.remove('show');
                     }, 2000);
-                } catch (err2) {
-                    alert('Nusxalashda xatolik yuz berdi!');
+                    
+                } catch (err) {
+                    // Eski browserlar uchun fallback
+                    const textArea = document.createElement('textarea');
+                    textArea.value = configText;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    
+                    try {
+                        document.execCommand('copy');
+                        const originalText = this.textContent;
+                        this.textContent = '✓ Nusxalandi!';
+                        this.classList.add('copied');
+                        statusMsg.textContent = '✓ Muvaffaqiyatli nusxalandi!';
+                        statusMsg.classList.add('show');
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.classList.remove('copied');
+                            statusMsg.classList.remove('show');
+                        }, 2000);
+                    } catch (err2) {
+                        alert('Nusxalashda xatolik yuz berdi!');
+                    }
+                    
+                    document.body.removeChild(textArea);
                 }
-                
-                document.body.removeChild(textArea);
-            }
+            });
         });
     </script>
 </body>
