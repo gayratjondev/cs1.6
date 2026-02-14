@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Copy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .config-box {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #11998e;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .status-message.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 SUPERB0Y Config</h1>
+        
+        <div class="config-box" id="configText">
+name "SUPERB0Y";rate "25000";cl_cmdrate "101";cl_updaterate "101";ex_interp "0.01";cl_lw "1";cl_lc "1";cl_dynamiccrosshair "0";cl_crosshair_size "small";cl_crosshair_translucent "0";gl_spriteblend "0";fps_max "101";cl_weather "0";gamma "3";brightness "3";gl_overbright "1";cl_minmodels "1";cl_corpsestay "10";max_shells "0";hud_fastswitch "1";hud_centerid "1";m_filter "0";cl_righthand "1";net_graph "3";cl_bob "0";cl_bobcycle "0";cl_bobup "0";bind "mwheelup" "+jump";bind "mwheeldown" "+duck; wait; -duck";bind "space" "+jump";bind "ctrl" "+duck";bind "F1" "m4a1; ak47; primammo; vesthelm; vest; defuser";host_writeconfig;echo "SUPERB0Y Config Loaded Successfully"
+        </div>
+
+        <button class="copy-btn" id="copyBtn">
+            📋 Copy Config
+        </button>
+
+        <div class="status-message" id="statusMsg">
+            ✓ Config muvaffaqiyatli nusxalandi!
+        </div>
+    </div>
+
+    <script>
+        const copyBtn = document.getElementById('copyBtn');
+        const statusMsg = document.getElementById('statusMsg');
+        const configText = document.getElementById('configText').textContent.trim();
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(configText);
+                
+                // Button o'zgarishi
+                copyBtn.textContent = '✓ Nusxalandi!';
+                copyBtn.classList.add('copied');
+                
+                // Status message ko'rsatish
+                statusMsg.classList.add('show');
+                
+                // 2 soniyadan keyin asl holatga qaytarish
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copy Config';
+                    copyBtn.classList.remove('copied');
+                    statusMsg.classList.remove('show');
+                }, 2000);
+                
+            } catch (err) {
+                // Eski browserlar uchun fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = configText;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    copyBtn.textContent = '✓ Nusxalandi!';
+                    copyBtn.classList.add('copied');
+                    statusMsg.classList.add('show');
+                    
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 Copy Config';
+                        copyBtn.classList.remove('copied');
+                        statusMsg.classList.remove('show');
+                    }, 2000);
+                } catch (err2) {
+                    alert('Nusxalashda xatolik yuz berdi!');
+                }
+                
+                document.body.removeChild(textArea);
+            }
+        });
+    </script>
+</body>
+</html>
